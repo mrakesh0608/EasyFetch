@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import '../css/NewRequest.css';
+import loadImg from '../icons/load.gif';
+import sendImg from '../icons/send.png';
+
+import ToggleDarkTheme from '../helpers/ToggleDarkTheme';
 
 import UnderDevelopment from '../components/UnderDevelopment';
 
@@ -26,15 +30,13 @@ const NewRequest = () => {
     const [Size, setSize] = useState(null);
 
     const sendFetch = async () => {
+        setIsPending('Sending Request');
         setFirstFetch(false);
-        setIsPending(true);
         setError(false);
         setResError(false);
-
-
-        if (!url) return setError("Invalid URL");
-        if(!url.match('http://') && !url.match('https://')) return setError("URL must start with either http:// or https://");
         
+        if(!isValidURL()) return;
+
         const options = { method };
         if (body && method !== 'GET') options.body = beautifyJSON(body);
         if (ReqHeaders) options.headers = JSON.stringify(JSON.parse(ReqHeaders), null, 4)
@@ -43,6 +45,7 @@ const NewRequest = () => {
         let t0 = performance.now();
         try {
             const res = await fetch(url, options);
+            setIsPending('Almost there');
             setStatus(res.status + ' ' + res.statusText);
             setSize(res.headers.get("content-length"));
             let he = {};
@@ -61,7 +64,7 @@ const NewRequest = () => {
             }
             else {
                 // console.log(res);
-                setResponse(JSON.stringify({ "error": res.statusText },null,2));
+                setResponse(JSON.stringify({ "error": res.statusText }, null, 2));
                 setResError(true);
             }
             setResTab(1);
@@ -72,6 +75,17 @@ const NewRequest = () => {
         setIsPending(false);
     }
 
+    const isValidURL= ()=>{
+        if (!url){
+            setError("Invalid URL");
+            return false;
+        };
+        if (!url.match('http://') && !url.match('https://')){
+            setError("URL must start with either http:// or https://");
+            return false;
+        }
+        return true;
+    }
     const beautifyJSON = (payload) => {
         setError(false);
         try {
@@ -121,13 +135,23 @@ const NewRequest = () => {
                 {ReqTab === 5 && <UnderDevelopment section="Tests" />}
             </div>
             {error ? <div className='msg' style={{ color: 'red' }}>{error}</div> :
-                firstFetch ? <div className='msg'>Send Request</div> :
-                    isPending ? <div className='msg'>Loading ...</div> :
+                firstFetch ? <div className='msg'>
+                    <img className='large-icons-no-filter' src={sendImg} alt="sendimg" />
+                    Send Request</div> :
+                    isPending ? <div className='msg'>
+                        <img className='large-icons' src={loadImg} alt="load" />
+                        <div>{isPending}</div>
+                    </div> :
                         <div className='response'>
                             <div className='meta'>
-                                Status: <span style={resError ? { color: 'red' } : {}}>{Status}</span>
-                                Size: <span>{Size} Bytes</span>
-                                Time: <span>{Time}</span>
+                                <div>
+                                    Status: <span style={resError ? { color: 'red' } : {}}>{Status}</span>
+                                    Size: <span>{Size} Bytes</span>
+                                    Time: <span>{Time}</span>
+                                </div>
+                                <div onClick={ToggleDarkTheme}>
+                                    <img className='icons' src={require('../icons/theme.png')} alt="theme" />
+                                </div>
                             </div>
                             <div className="response-body body-head">
                                 <div className={ResTab === 1 ? 'set' : ''} onClick={() => setResTab(1)}>Response</div>
