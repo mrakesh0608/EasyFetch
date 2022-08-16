@@ -1,36 +1,50 @@
 .new-request {
-    width: 100%;
     background-color: black;
+    width: 100%;
+    height: 100vh;
     color: white;
     display: flex;
 }
+
 .request,
 .response,
-.msg
-{
+.msg {
     width: 50vw;
-    height: 100vh;
+    height: 100%;
     padding: 10px;
 }
-.request > div,
-.response > div
-{
+
+.request>div,
+.response>div {
     width: 100%;
     margin: 15px 0;
 }
+
 .request {
     border-right: 1px solid white;
 }
+
 .request-head {
     width: 100%;
     display: flex;
     align-items: center;
 }
+
 .method select,
 .code select,
 .url input,
 .send {
     padding: 10px 12px;
+}
+
+@media(max-width:600px) {
+    .method select {
+        padding: 5px;
+    }
+
+    .request-head {
+        flex-wrap: wrap;
+    }
 }
 
 .url,
@@ -42,9 +56,11 @@
     background-color: #3F51B5;
     cursor: pointer;
 }
-.send:active{
+
+.send:active {
     opacity: 0.8;
 }
+
 .meta {
     width: 100%;
     background-color: black;
@@ -59,8 +75,9 @@
 }
 
 .body-head {
-    display: flex;
     background-color: burlywood;
+    display: flex;
+    overflow: auto;
 }
 
 .body-head>div {
@@ -84,22 +101,25 @@
     height: 200px;
     font-weight: 600;
 }
-.req-body textarea{
-    width: 100%;
-    height: 62vh;
-    background-color: black;
+
+textarea {
+    background-color: rgb(59, 58, 58);
     color: white;
+    font-size: 18px;
     resize: none;
 }
+
 .res {
     color: white;
     font-size: 20px;
 }
-.select-code{
+
+.select-code {
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
 }
+
 pre {
     font-size: 16px;
     background-color: black;
@@ -107,7 +127,23 @@ pre {
     white-space: pre-wrap;
     display: block;
 }
-.msg{
+
+textarea,
+pre,
+.code {
+    width: 100%;
+    height: calc(100vh - 230px);
+    overflow-y: auto;
+}
+
+textarea,
+.req-res-body,
+.code {
+    border: 1px solid white;
+
+}
+
+.msg {
     display: flex;
     align-items: center;
     justify-content: center;
