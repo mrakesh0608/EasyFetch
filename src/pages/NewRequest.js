@@ -47,7 +47,7 @@ const NewRequest = () => {
             const res = await fetch(url, options);
             setIsPending('Almost there');
             setStatus(res.status + ' ' + res.statusText);
-            setSize(res.headers.get("content-length"));
+            setSize(res.headers.get('content-length'));
             let he = {};
             res.headers.forEach((value, name) => he[name.toString()] = value);
             // console.log(res,he);
